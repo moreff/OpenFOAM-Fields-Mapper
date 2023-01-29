@@ -1,0 +1,23 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  dev
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+
+mode            planar; // spherical
+
+centerOfData    0;
+
+directionOfData 1; // -1
+
+mappingOrigin  (0 0 0);
+
+directionOfMapping (1 0 0); // only for planar mode
+
+frequency       0;     // default = 0 (no oscillations)
+
+amplitude             0.001; // default = max x in cantera data / 50
+
+// ************************************************************************* //

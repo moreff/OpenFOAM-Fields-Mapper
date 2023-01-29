@@ -1,0 +1,14 @@
+rm -r 0
+cp -r 0.map.orig 0
+cp cantera_data/* 0/
+. cantera_data/SPECIES
+for specie in $species
+do
+    cp 0/Yi.mytemplate 0/$specie
+    foamDictionary -entry FoamFile/object -set $specie 0/$specie > /dev/null 2>&1
+done
+# don't forget to set proper BC for pressure also
+# e.g. gamma at boundaries:
+# foamDictionary -entry boundaryField/inlet/gamma -set "$gamma_u" 0/p
+# foamDictionary -entry boundaryField/outlet/gamma -set "$gamma_b" 0/p
+# foamDictionary -entry p -set "$p" 0/p
