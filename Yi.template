@@ -1,0 +1,51 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  10
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    location    "0";
+    object      Y;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 0 0 0 0 0 0];
+
+#include "../OpenFOAM-Fields-Mapper/readLeftValue.H";  // puts the first value in your data to $leftValue
+#include "../OpenFOAM-Fields-Mapper/readRightValue.H"; // puts the last value in your data to $rightValue
+#include "../OpenFOAM-Fields-Mapper/mapField.H"        // maps your data to the field $mappedField
+
+internalField nonuniform $mappedField;
+
+boundaryField
+{
+    inlet
+    {
+        type            fixedValue;
+        value           uniform $leftValue;
+    }
+
+    outlet
+    {
+        type            zeroGradient;
+    }
+
+    "top|bottom"
+    {
+        type cyclic;
+
+    }
+
+    empty
+    {
+        type            empty;
+    }
+}
+
+// ************************************************************************* //
