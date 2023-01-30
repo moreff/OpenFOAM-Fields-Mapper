@@ -24,7 +24,7 @@ internalField nonuniform $mappedField;
 
 boundaryField
 {
-    inlet
+    movingWall
     {
         type            fixedValue;
         value           uniform ($leftValue 0 0);
@@ -33,6 +33,11 @@ boundaryField
     outlet
     {
         type            zeroGradient;
+    }
+
+    fixedWalls
+    {
+        type            noSlip;
     }
 
     "top|bottom"

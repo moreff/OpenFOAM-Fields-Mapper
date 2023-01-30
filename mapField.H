@@ -11,7 +11,7 @@ mappedField #codeStream
     #{
         -I$(LIB_SRC)/finiteVolume/lnInclude \
         -I$(LIB_SRC)/meshTools/lnInclude \
-        -I../../../
+        -I$(FOAM_CASE)/OpenFOAM-Fields-Mapper
     #};
     codeLibs
     #{
