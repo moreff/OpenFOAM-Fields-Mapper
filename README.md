@@ -1,5 +1,5 @@
 # OpenFOAM-Fields-Mapper
-Functions, mapping 1d fields, defined in a text file, to OpenFOAM fields
+Functions for mapping 1d fields, defined in a text file, to OpenFOAM fields
 
 # Usage  
 An example with cavity tutorial case:  
