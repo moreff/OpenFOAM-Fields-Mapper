@@ -25,18 +25,18 @@ mappedField #codeStream
 
         const word mode = config.lookup<word>("mode");
         Info << mode << endl;
-        if ((mode != "planar")&&(mode != "spherical")) {
+        if ((mode != "planar")&&(mode != "cylindrical")&&(mode != "spherical")) {
             FatalIOErrorInFunction
             (
                 config
-            )   << "Mode options are planar/spherical"
+            )   << "Mode options are planar/cylindrical/spherical"
                 << exit(FatalIOError);
         }
 
         const Switch inverseData = config.lookupOrDefault<Switch>("inverseData", false);
         const scalar centerOfData = config.lookupOrDefault<scalar>("centerOfData", 0.0);
         const vector mappingOrigin = config.lookupOrDefault<vector>("mappingOrigin", vector(0.,0.,0.));
-        vector directionOfMapping = config.lookupOrDefault<vector>("directionOfMapping", vector(0.,0.,0.));
+        vector directionOfMapping = config.lookupOrDefault<vector>("directionOfMapping", vector(0.,0.,0.)); // for planar and cylindrical modes
         const word fieldType = d.headerClassName();
 
         if (mag(directionOfMapping) == 0) {
@@ -60,18 +60,36 @@ mappedField #codeStream
         forAll(Yscal, i)
         {
             vector distanceV = mesh.C()[i]-mappingOrigin;
-            scalar distance = (mode=="planar")?
-                              directionOfMapping&distanceV
-                              :
-                              mag(mesh.C()[i]-mappingOrigin);
+            // scalar distance = (mode=="planar")?
+            //                   directionOfMapping&distanceV
+            //                   :
+            //                   mag(mesh.C()[i]-mappingOrigin);
+            scalar distance = 0;
+            if (mode == "planar") {
+                distance = directionOfMapping&distanceV;
+            } else if (mode == "cylindrical") {
+                scalar alpha = acos( directionOfMapping & distanceV / (mag(directionOfMapping)*mag(distanceV)) );
+                distance = mag(distanceV) * sin(alpha);
+                distanceV = distanceV - directionOfMapping * (directionOfMapping&distanceV);
+            } else if (mode == "spherical") {
+                distance = mag(distanceV);
+            }
+            Info << distanceV << endl;
 
             scalar convertedDistance = (inverseData?-1:1)*distance+centerOfData;
             float val = interpolate(datax, datay, convertedDistance);
             if (fieldType == "volVectorField"){
-                Yvec[i] = (mode=="planar")?
-                val*directionOfMapping
-                :
-                val*(distanceV/mag(distanceV));
+                // Yvec[i] = (mode=="planar")?
+                // val*directionOfMapping
+                // :
+                // val*(distanceV/mag(distanceV));
+                if (mode == "planar") {
+                    Yvec[i] = val*directionOfMapping;
+                } else if (mode == "cylindrical") {
+                    Yvec[i] = val*(distanceV/mag(distanceV));
+                } else if (mode == "spherical") {
+                    Yvec[i] = val*(distanceV/mag(distanceV));
+                }
             } else if (fieldType == "volScalarField"){
                 Yscal[i] = val;
             }

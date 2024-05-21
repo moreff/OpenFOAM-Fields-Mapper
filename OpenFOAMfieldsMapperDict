@@ -6,14 +6,20 @@
      \\/     M anipulation  |
 \*---------------------------------------------------------------------------*/
 
-mode            planar; // spherical
+// Mapping mode:
+// Planar - map in the directionOfMapping
+// Cylindrical - map on cylinder with axis directionOfMapping
+// Spherical - map on a cylinder in all directions
+mode spherical;
 
+// ---=== Parameters, related to .dat file coords  ===---
 centerOfData    0;
+inverseData     false;
+// ------------------------------------------------------
 
-inverseData true; // -1
-
-mappingOrigin  (0 0.01 0);
-
-directionOfMapping (1 0 0); // only for planar mode
+// ---===    Parameters, related to mesh coords    ===---
+mappingOrigin       (0.05 0.05 0);
+directionOfMapping  (1 0 0);
+// ------------------------------------------------------
 
 // ************************************************************************* //
